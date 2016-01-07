@@ -1,0 +1,51 @@
+﻿<div class="container">
+    <div class="col-md-4">
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active" {active:panel.isselected(1) }>
+                <a href="" ng-click="GoogleMapTemplate.service.showFirstPanel()" aria-controls="home" role="tab" data-toggle="tab">
+                    Create Place
+                </a>
+            </li>
+            <li role="presentation" {active:panel.isselected(2) }>
+                <a href="" ng-click="GoogleMapTemplate.service.showSecondPanel()" aria-controls="filters" role="tab" data-toggle="tab">
+                    Filters
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+<div class="container">
+    <h3>Places</h3>
+    <div ng-controller="MapController as mapCtrl">
+        <div class="col-md-6">
+            <div id="googleMap" style="width:500px;height:380px;"></div>        
+        </div>
+    
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="usr">Name:</label>
+                <input type="text" class="form-control" id="usr" ng-model="mapCtrl.name" ng-required="true">
+            </div>
+            <div class="form-group">
+                <label for="pwd">Description:</label>
+                <input type="text" class="form-control" id="pwd" ng-model="mapCtrl.description" ng-required="true">
+            </div>
+            <div class="form-group">
+                <select ng-model="mapCtrl.category" class="col-md-7" title="Category" style="height:35px" ng-required="true">
+                    <option value="Food">Food</option>
+                    <option value="Clubs">Clubs</option>
+                    <option value="Bars">Bars</option>
+                </select>              
+            </div>             
+        </div>
+        <div class="col-md-6">
+            <br />
+            <br />
+            <button ng-click="mapCtrl.saveCoord()" class="btn btn-default" style="width:138px">Save Place</button>
+            <button ng-click="mapCtrl.clear()" class="btn btn-default" style="width:138px">Delete Marker</button>
+        </div>
+    </div>
+    
+</div>
