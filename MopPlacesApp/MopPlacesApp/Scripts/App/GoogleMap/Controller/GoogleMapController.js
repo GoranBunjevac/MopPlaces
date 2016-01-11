@@ -1,6 +1,6 @@
 ﻿(function () {
 
-    angular.module("mopPlacesModule").controller("MapController", ["$http", "MapPlacesService", function ($http, MapPlacesService) {
+    angular.module("mopPlacesModule").controller("MapController", ["$http", "MapPlacesService", "growl", function ($http, MapPlacesService, growl) {
 
         var self = this;
 
@@ -8,6 +8,9 @@
         self.saveCoord = saveCoord;
         self.clear = clear;
         self.isDisabled = false;
+
+
+
         setTimeout(function () { initialize(); }, 1000); // sets timeout allowing maps to initialize 
        
         var myCenter = new google.maps.LatLng(43.8585, 18.4200);
@@ -29,9 +32,8 @@
             google.maps.event.addListener(self.map, 'click', function (event) {
             
                  //max selected locations is 1
-                var infowindow = new google.maps.InfoWindow();
                 if (count < 1) {
-                    geocodeLatLng(event.latLng, infowindow);
+                    geocodeLatLng(event.latLng);
                     var GoogleApi = {
                         Long: event.latLng.lng(),
                         Lati: event.latLng.lat()
@@ -44,7 +46,7 @@
         }
       
         // geocoding tranlating Lon and Lat into Adress and adding marker
-        function geocodeLatLng(location, infowindow) {
+        function geocodeLatLng(location) {
 
             geocoder.geocode({ 'location': location }, function (results, status) {
                 if (status === google.maps.GeocoderStatus.OK) {
@@ -54,8 +56,6 @@
                             map: self.map
                         });
                         markers.push(marker);
-                        infowindow.setContent(results[1].formatted_address);
-                        infowindow.open(self.map, marker);
                     }
                 }
             });
@@ -63,10 +63,6 @@
 
         // function for coordinates save
         function saveCoord() {
-            
-            
-            console.log(myplaces);
-            
             
             if (myplaces.length > 0) {
                 var place = {
@@ -77,30 +73,25 @@
                     Lati: myplaces[0].Lati
                 }
 
-
-
                 data = JSON.stringify(place);
 
-                $http.post(url = "api/googlemaps", data
-                 ).then(function (response) {
-                     console.log("SPASENO");
-                     myplaces = []
-                     isDisabled();
+                if (place.Category == null || place.Name == null || place.Description == null ) {
+                    growl.error("Name, Description or Category not added !");
+                } else {
+                    $http.post(url = "api/googlemaps", data
+               ).then(function (response) {
+                   growl.success("Location successfully saved !");
+                   myplaces = []
 
-                 }, function (error) {
-                     console.log("ERORCINA");
-                     console.log(error);
-                     myplaces = []
-                 });
-            }
-            else {
-                console.log("fula");
+               }, function (error) {
+                   console.log(error);
+                   myplaces = []
+               });
+                }
+              
             }
         }
 
-        function isDisabled() {
-            self.isDisabled = true;
-        }
         
         //delete marker
         function clear() {
@@ -111,6 +102,77 @@
             myplaces = [];
             count = 0;
         }
+
+
+        self.getFood = getFood;
+        self.getBars = getBars;
+        self.getClubs = getClubs;
+        self.food = [];
+        self.bars = [];
+        self.clubs = [];
+        self.pozicija = {};
+       
+
+        function getFood() {
+            $http.get("api/GoogleMaps/GetFood").then(function (response) {
+                self.food = response.data;
+                //add markers for all food places
+                angular.forEach(self.food, function (value, key) {
+                    geocodeLatLng(event.latLng);
+                    var GoogleApi = {
+                        lng: Number(value.Long),
+                        lat: Number(value.Lati)
+                    };
+                    var marker = new google.maps.Marker({
+                        position: GoogleApi,
+                        map: self.map
+                    });
+                    markers.push(marker);
+                });              
+            }, function (error) {
+            });
+        }
+
+        function getBars() {
+            $http.get("api/GoogleMaps/GetBars").then(function (response) {
+                self.bars = response.data;
+                //add markers for all bar places
+                angular.forEach(self.bars, function (value, key) {
+                    geocodeLatLng(event.latLng);
+                    var GoogleApi = {
+                        lng: Number(value.Long),
+                        lat: Number(value.Lati)
+                    };
+                    var marker = new google.maps.Marker({
+                        position: GoogleApi,
+                        map: self.map
+                    });
+                    markers.push(marker);
+                });
+            }, function (error) {
+            });
+        }
+
+        function getClubs() {
+            $http.get("api/GoogleMaps/GetClubs").then(function (response) {
+                self.clubs = response.data;
+                //add markers for all club places
+                angular.forEach(self.clubs, function (value, key) {
+                    geocodeLatLng(event.latLng);
+                    var GoogleApi = {
+                        lng: Number(value.Long),
+                        lat: Number(value.Lati)
+                    };
+                    var marker = new google.maps.Marker({
+                        position: GoogleApi,
+                        map: self.map
+                    });
+                    markers.push(marker);
+                });
+            }, function (error) {
+            });
+        }
+      
 
 
     }]);

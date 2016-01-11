@@ -215,11 +215,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
+    <Content Include="Content\angular-growl.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="Images\bar1.jpg" />
+    <Content Include="Images\club1.jpg" />
+    <Content Include="Images\FoodAndDrinks2.jpg" />
     <Content Include="Scripts\Angular\angular-animate.js" />
     <Content Include="Scripts\Angular\angular-animate.min.js" />
     <Content Include="Scripts\Angular\angular-aria.js" />
@@ -227,6 +231,7 @@
     <Content Include="Scripts\Angular\angular-cookies.js" />
     <Content Include="Scripts\Angular\angular-cookies.min.js" />
     <Content Include="Scripts\Angular\angular-csp.css" />
+    <Content Include="Scripts\Angular\angular-growl.min.js" />
     <Content Include="Scripts\Angular\angular-loader.js" />
     <Content Include="Scripts\Angular\angular-loader.min.js" />
     <Content Include="Scripts\Angular\angular-message-format.js" />
@@ -2776,6 +2781,7 @@
     <Content Include="Scripts\Angular\errors.json" />
     <Content Include="Scripts\Angular\version.json" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\jcs-auto-validate.min.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />

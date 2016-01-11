@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using MopPlacesApp.Models;
+using System.Web.Helpers;
 
 namespace MopPlacesApp.Controllers
 {
@@ -17,14 +18,32 @@ namespace MopPlacesApp.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: api/GoogleMaps
-        public IQueryable<GoogleMap> GetGoogleMaps()
+        [Route("api/GoogleMaps/GetFood")]
+        public IHttpActionResult GetFood()
         {
-            return db.GoogleMaps;
+            List<GoogleMap> places = db.GoogleMaps.Where(x=>x.Category == "Food").ToList();
+            return Ok(places);
+        }
+
+        [Route("api/GoogleMaps/GetBars")]
+        public IHttpActionResult GetBars()
+        {
+            List<GoogleMap> places = db.GoogleMaps.Where(x => x.Category == "Bars").ToList();
+
+            return Ok(places);
+        }
+
+        [Route("api/GoogleMaps/GetClubs")]
+        public IHttpActionResult GetClubs()
+        {
+            List<GoogleMap> places = db.GoogleMaps.Where(x => x.Category == "Clubs").ToList();
+
+            return Ok(places);
         }
 
         // GET: api/GoogleMaps/5
         [ResponseType(typeof(GoogleMap))]
-        public IHttpActionResult GetGoogleMap(int id)
+        public IHttpActionResult GetGoogleMap(int? id)
         {
             GoogleMap googleMap = db.GoogleMaps.Find(id);
             if (googleMap == null)
